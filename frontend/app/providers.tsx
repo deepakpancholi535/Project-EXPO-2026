@@ -1,0 +1,13 @@
+"use client";
+
+import { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/auth-provider";
+
+export const Providers = ({ children }: { children: ReactNode }) => {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
+  );
+};
