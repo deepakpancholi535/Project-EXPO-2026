@@ -1,14 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpenCheck, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
+import {
+  BookOpenCheck,
+  LayoutDashboard,
+  LogOut,
+  Sparkles,
+  type LucideIcon
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/components/auth-provider";
 
-const navItems = [
+type NavItem = {
+  href: Route;
+  label: string;
+  icon: LucideIcon;
+};
+
+const navItems: NavItem[] = [
   { href: "/careers", label: "Careers", icon: BookOpenCheck },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/profile", label: "Profile", icon: Sparkles }
