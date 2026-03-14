@@ -11,15 +11,29 @@ import { notFoundHandler } from "./middleware/notFound";
 const app = express();
 
 const normalizeOrigin = (value: string): string => {
+  const cleanedValue = value
+    .trim()
+    .replace(/^['"]+|['"]+$/g, "")
+    .replace(/\/+$/, "");
+
   try {
-    return new URL(value).origin;
+    return new URL(cleanedValue).origin;
   } catch {
-    return value.trim().replace(/\/+$/, "");
+    return cleanedValue;
   }
 };
 
 const isAllowedOrigin = (origin: string): boolean => {
   const normalizedOrigin = normalizeOrigin(origin);
+  try {
+    const originUrl = new URL(normalizedOrigin);
+    // Fallback for Vercel preview and production deployments.
+    if (originUrl.protocol === "https:" && originUrl.hostname.endsWith(".vercel.app")) {
+      return true;
+    }
+  } catch {
+    // no-op
+  }
 
   return env.clientUrls.some((allowed) => {
     const normalizedAllowed = normalizeOrigin(allowed);
