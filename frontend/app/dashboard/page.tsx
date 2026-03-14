@@ -23,14 +23,24 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type DashboardResult = CompatibilityResult & {
-  careerId?:
-    | string
-    | {
-        _id: string;
-        title: string;
-        slug: string;
-      };
+type PopulatedCareer = {
+  _id: string;
+  title: string;
+  slug: string;
+};
+
+type DashboardResult = Omit<CompatibilityResult, "careerId" | "careerTitle"> & {
+  careerId: string | PopulatedCareer | null;
+  careerTitle?: string;
+};
+
+const isPopulatedCareer = (value: unknown): value is PopulatedCareer => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "title" in value &&
+    typeof (value as { title?: unknown }).title === "string"
+  );
 };
 
 export default function DashboardPage() {
@@ -53,10 +63,9 @@ export default function DashboardPage() {
       .reverse()
       .slice(0, 8)
       .map((item, index) => {
-        const careerTitle =
-          typeof item.careerId === "object"
-            ? item.careerId.title
-            : item.careerTitle ?? `Career ${index + 1}`;
+        const careerTitle = isPopulatedCareer(item.careerId)
+          ? item.careerId.title
+          : item.careerTitle ?? `Career ${index + 1}`;
         return {
           index: index + 1,
           career: careerTitle,

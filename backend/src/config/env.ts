@@ -3,7 +3,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const mongoUri =
-  process.env.MONGODB_URI ?? process.env.MONGO_URI ?? process.env.MONGO_URL ?? process.env.DATABASE_URL;
+  process.env.MONGODB_URI ??
+  process.env.MONGO_URI ??
+  process.env.MONGO_URL ??
+  process.env.MONGO_PRIVATE_URL ??
+  process.env.MONGO_PUBLIC_URL ??
+  process.env.DATABASE_URL;
 const jwtSecret = process.env.JWT_SECRET ?? process.env.JWT_KEY;
 const rawClientUrl = process.env.CLIENT_URL ?? "http://localhost:3000";
 const clientUrls = rawClientUrl
