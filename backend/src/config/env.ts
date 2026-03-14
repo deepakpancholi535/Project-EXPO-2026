@@ -18,7 +18,7 @@ const clientUrls = rawClientUrl
 
 if (!mongoUri) {
   throw new Error(
-    "Missing required environment variable: MONGODB_URI (or MONGO_URI / MONGO_URL / DATABASE_URL)"
+    "Missing required environment variable: MONGODB_URI (or MONGO_URI / MONGO_URL / MONGO_PRIVATE_URL / MONGO_PUBLIC_URL / DATABASE_URL)"
   );
 }
 

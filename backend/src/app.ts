@@ -10,6 +10,43 @@ import { notFoundHandler } from "./middleware/notFound";
 
 const app = express();
 
+const normalizeOrigin = (value: string): string => {
+  try {
+    return new URL(value).origin;
+  } catch {
+    return value.trim().replace(/\/+$/, "");
+  }
+};
+
+const isAllowedOrigin = (origin: string): boolean => {
+  const normalizedOrigin = normalizeOrigin(origin);
+
+  return env.clientUrls.some((allowed) => {
+    const normalizedAllowed = normalizeOrigin(allowed);
+
+    if (normalizedAllowed === normalizedOrigin) {
+      return true;
+    }
+
+    // Supports wildcard entries like "https://*.vercel.app"
+    if (normalizedAllowed.includes("*.")) {
+      try {
+        const originUrl = new URL(normalizedOrigin);
+        const wildcardBase = normalizedAllowed.replace("*.", "");
+        const allowedUrl = new URL(wildcardBase);
+        return (
+          originUrl.protocol === allowedUrl.protocol &&
+          originUrl.hostname.endsWith(allowedUrl.hostname)
+        );
+      } catch {
+        return false;
+      }
+    }
+
+    return false;
+  });
+};
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -18,7 +55,7 @@ app.use(
         return;
       }
 
-      if (env.clientUrls.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
