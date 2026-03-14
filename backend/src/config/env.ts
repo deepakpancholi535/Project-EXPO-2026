@@ -2,18 +2,29 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const requiredVars = ["MONGODB_URI", "JWT_SECRET"];
+const mongoUri =
+  process.env.MONGODB_URI ?? process.env.MONGO_URI ?? process.env.MONGO_URL ?? process.env.DATABASE_URL;
+const jwtSecret = process.env.JWT_SECRET ?? process.env.JWT_KEY;
+const rawClientUrl = process.env.CLIENT_URL ?? "http://localhost:3000";
+const clientUrls = rawClientUrl
+  .split(",")
+  .map((url) => url.trim())
+  .filter(Boolean);
 
-requiredVars.forEach((key) => {
-  if (!process.env[key]) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-});
+if (!mongoUri) {
+  throw new Error(
+    "Missing required environment variable: MONGODB_URI (or MONGO_URI / MONGO_URL / DATABASE_URL)"
+  );
+}
+
+if (!jwtSecret) {
+  throw new Error("Missing required environment variable: JWT_SECRET (or JWT_KEY)");
+}
 
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   port: Number(process.env.PORT ?? 5000),
-  mongoUri: process.env.MONGODB_URI as string,
-  jwtSecret: process.env.JWT_SECRET as string,
-  clientUrl: process.env.CLIENT_URL ?? "http://localhost:3000"
+  mongoUri,
+  jwtSecret,
+  clientUrls
 };
