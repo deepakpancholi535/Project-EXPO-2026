@@ -8,7 +8,35 @@ import {
   User
 } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+const normalizeApiUrl = (rawUrl: string): string => {
+  const cleanedUrl = rawUrl
+    .trim()
+    .replace(/^['"]+|['"]+$/g, "")
+    .replace(/\/+$/, "");
+
+  if (!cleanedUrl) {
+    return cleanedUrl;
+  }
+
+  // Keep relative paths untouched (e.g., "/api" behind a proxy).
+  if (cleanedUrl.startsWith("/")) {
+    return cleanedUrl;
+  }
+
+  try {
+    const parsedUrl = new URL(cleanedUrl);
+    if (!parsedUrl.pathname || parsedUrl.pathname === "/") {
+      parsedUrl.pathname = "/api";
+    }
+    return parsedUrl.toString().replace(/\/+$/, "");
+  } catch {
+    return cleanedUrl;
+  }
+};
+
+const API_URL = normalizeApiUrl(
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api"
+);
 
 const api = axios.create({
   baseURL: API_URL

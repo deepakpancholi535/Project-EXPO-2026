@@ -97,6 +97,15 @@ app.use("/api/careers", careerRoutes);
 app.use("/api/trials", trialRoutes);
 app.use("/api/results", resultRoutes);
 
+// Backward-compatible route aliases for clients configured without "/api" in base URL.
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok", service: "tac-backend" });
+});
+app.use("/auth", authRoutes);
+app.use("/careers", careerRoutes);
+app.use("/trials", trialRoutes);
+app.use("/results", resultRoutes);
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
