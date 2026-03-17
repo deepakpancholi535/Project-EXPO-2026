@@ -29,10 +29,10 @@ type NavItem = {
 };
 
 const privateNavItems: NavItem[] = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/courses", label: "Courses", icon: BookOpenCheck },
   { href: "/game-zone", label: "Game Zone", icon: Gamepad2 },
   { href: "/leaderboards", label: "Leaderboards", icon: Trophy },
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/certificates", label: "Certificates", icon: BadgeCheck },
   { href: "/profile", label: "Profile", icon: UserRound }
 ];

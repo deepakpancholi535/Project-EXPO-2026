@@ -140,6 +140,68 @@ export default function DashboardPage() {
           </p>
         </section>
 
+        <section className="grid gap-4 lg:grid-cols-3">
+          <Card className="lg:col-span-2 overflow-hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-5 w-5 text-primary" />
+                Start New Trial
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Take a new career simulation to widen your profile and unlock more suggestions.
+              </p>
+            </CardHeader>
+            <CardContent className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2 rounded-2xl border border-border/70 bg-card/60 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Why Start Now
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Build stronger confidence by comparing multiple career trial outcomes.
+                </p>
+              </div>
+              <div className="space-y-2 rounded-2xl border border-border/70 bg-card/60 p-4">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Next Step
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Complete one more 5-day simulation to improve recommendation accuracy.
+                </p>
+              </div>
+              <Button asChild className="w-full sm:col-span-2" size="lg">
+                <Link href="/careers">
+                  Explore Careers
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-primary" />
+                Career Suggestions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {(latestResult?.suggestedCareers ?? []).length > 0 ? (
+                  (latestResult?.suggestedCareers ?? []).map((career) => (
+                    <Badge key={career} variant="secondary">
+                      {career}
+                    </Badge>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Complete a trial to unlock personalized suggestions.
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader>
@@ -296,50 +358,6 @@ export default function DashboardPage() {
               </p>
               <Button asChild className="mt-4 w-full" variant="outline">
                 <Link href="/certificates">Open Certificates</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-3">
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-primary" />
-                Career Suggestions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-2">
-              {(latestResult?.suggestedCareers ?? []).length > 0 ? (
-                (latestResult?.suggestedCareers ?? []).map((career) => (
-                  <Badge key={career} variant="secondary">
-                    {career}
-                  </Badge>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Complete a trial to unlock personalized suggestions.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Start New Trial
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4 text-sm text-muted-foreground">
-                Try another profession simulation and expand your profile.
-              </p>
-              <Button asChild className="w-full">
-                <Link href="/careers">
-                  Explore Careers
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
               </Button>
             </CardContent>
           </Card>
