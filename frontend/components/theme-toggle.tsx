@@ -12,6 +12,7 @@ export const ThemeToggle = () => {
     <Button
       variant="outline"
       size="icon"
+      className="rounded-full border-black/10 bg-white/70 dark:border-white/10 dark:bg-slate-900/75"
       aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >

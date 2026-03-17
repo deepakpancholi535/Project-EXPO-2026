@@ -4,6 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+  50% {
+    transform: translateX(6px) translateY(-6px);
+  }
+}
+
 :root {
   --background: 210 28% 97%;
   --foreground: 222 24% 13%;
@@ -76,4 +96,19 @@ a {
 
 ::selection {
   background: rgba(96, 165, 250, 0.35);
+}
+
+.float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.drift-slow {
+  animation: drift 12s ease-in-out infinite;
+}
+
+.grid-noise {
+  background-image:
+    linear-gradient(rgba(120, 137, 173, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 137, 173, 0.11) 1px, transparent 1px);
+  background-size: 24px 24px;
 }

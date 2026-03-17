@@ -19,8 +19,8 @@ const socialLinks = [
 
 export const AppFooter = () => {
   return (
-    <footer className="mt-12 border-t border-border/70 bg-white/60 backdrop-blur-sm dark:bg-card/30">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-5">
+    <footer className="mt-14 px-4 pb-6 sm:px-6">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 rounded-3xl border border-black/5 bg-white/70 px-4 py-10 shadow-lg backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 sm:grid-cols-2 sm:px-6 lg:grid-cols-5">
         <div className="space-y-3 lg:col-span-2">
           <PlatformLogo href="/" />
           <p className="max-w-md text-sm text-muted-foreground">
@@ -102,7 +102,7 @@ export const AppFooter = () => {
         </div>
       </div>
 
-      <div className="border-t border-border/60 py-4">
+      <div className="mx-auto mt-5 max-w-7xl border-t border-black/5 py-4 dark:border-white/10">
         <p className="text-center text-xs text-muted-foreground">
           Copyright 2026 TAC Learn. Built for skill-first career growth.
         </p>
