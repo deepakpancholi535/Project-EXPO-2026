@@ -22,7 +22,7 @@ export const AppFooter = () => {
     <footer className="mt-12 border-t border-border/70 bg-white/60 backdrop-blur-sm dark:bg-card/30">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-5">
         <div className="space-y-3 lg:col-span-2">
-          <PlatformLogo href="/" className="h-14 w-auto" />
+          <PlatformLogo href="/" />
           <p className="max-w-md text-sm text-muted-foreground">
             TAC Learn is a modern course and gamification platform designed for
             students to build practical skills through guided modules, interactive

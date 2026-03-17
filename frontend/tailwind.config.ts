@@ -41,8 +41,8 @@ const config: Config = {
         "2xl": "1.5rem"
       },
       fontFamily: {
-        sans: ["Manrope", "system-ui", "sans-serif"],
-        heading: ["Space Grotesk", "system-ui", "sans-serif"]
+        sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        heading: ["Sora", "system-ui", "sans-serif"]
       },
       boxShadow: {
         glow: "0 10px 40px -20px rgba(0, 195, 255, 0.4)"

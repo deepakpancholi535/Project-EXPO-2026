@@ -1,43 +1,43 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: 204 100% 97%;
-  --foreground: 214 39% 13%;
+  --background: 220 33% 97%;
+  --foreground: 225 39% 14%;
   --card: 0 0% 100%;
-  --card-foreground: 214 39% 13%;
-  --primary: 202 95% 36%;
+  --card-foreground: 225 39% 14%;
+  --primary: 194 100% 42%;
   --primary-foreground: 210 40% 98%;
-  --secondary: 190 53% 92%;
-  --secondary-foreground: 174 58% 16%;
-  --muted: 200 29% 92%;
-  --muted-foreground: 214 19% 40%;
-  --accent: 28 100% 93%;
-  --accent-foreground: 22 67% 30%;
-  --border: 203 45% 84%;
-  --input: 205 29% 89%;
-  --ring: 199 93% 45%;
+  --secondary: 222 36% 92%;
+  --secondary-foreground: 228 32% 18%;
+  --muted: 220 30% 94%;
+  --muted-foreground: 223 18% 42%;
+  --accent: 30 94% 94%;
+  --accent-foreground: 28 56% 30%;
+  --border: 220 25% 84%;
+  --input: 220 20% 88%;
+  --ring: 196 100% 45%;
 }
 
 .dark {
-  --background: 222 35% 11%;
-  --foreground: 210 40% 96%;
-  --card: 224 32% 16%;
-  --card-foreground: 210 40% 96%;
-  --primary: 189 100% 47%;
-  --primary-foreground: 224 39% 12%;
-  --secondary: 217 30% 23%;
-  --secondary-foreground: 199 100% 90%;
-  --muted: 219 29% 22%;
-  --muted-foreground: 213 16% 70%;
-  --accent: 20 42% 31%;
-  --accent-foreground: 32 86% 89%;
-  --border: 220 21% 30%;
-  --input: 220 19% 28%;
-  --ring: 188 86% 53%;
+  --background: 228 34% 10%;
+  --foreground: 212 48% 96%;
+  --card: 227 30% 14%;
+  --card-foreground: 212 48% 96%;
+  --primary: 193 95% 52%;
+  --primary-foreground: 228 34% 10%;
+  --secondary: 228 22% 21%;
+  --secondary-foreground: 205 100% 92%;
+  --muted: 227 22% 19%;
+  --muted-foreground: 215 18% 74%;
+  --accent: 25 36% 28%;
+  --accent-foreground: 33 84% 88%;
+  --border: 227 17% 30%;
+  --input: 227 17% 28%;
+  --ring: 194 92% 56%;
 }
 
 html,
@@ -48,21 +48,25 @@ body {
 body {
   @apply bg-background text-foreground font-sans antialiased;
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(0, 157, 255, 0.12), transparent 35%),
-    radial-gradient(circle at 90% 15%, rgba(255, 140, 46, 0.16), transparent 32%),
-    radial-gradient(circle at 70% 85%, rgba(0, 210, 170, 0.14), transparent 34%),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.9));
+    radial-gradient(circle at 8% 12%, rgba(56, 189, 248, 0.16), transparent 35%),
+    radial-gradient(circle at 88% 18%, rgba(59, 130, 246, 0.13), transparent 40%),
+    radial-gradient(circle at 72% 86%, rgba(249, 115, 22, 0.12), transparent 32%),
+    linear-gradient(to bottom, rgba(250, 252, 255, 0.94), rgba(243, 248, 255, 0.98));
   background-attachment: fixed;
 }
 
 .glass-card {
-  @apply border border-white/25 bg-white/60 backdrop-blur-xl shadow-xl dark:bg-white/10 dark:border-white/15;
+  @apply rounded-3xl border border-border/70 bg-card/88 text-card-foreground shadow-[0_18px_50px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_26px_70px_-30px_rgba(15,23,42,0.52)];
 }
 
 a {
-  @apply transition-colors duration-200;
+  @apply transition-all duration-200;
 }
 
 * {
   @apply scroll-smooth;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.35);
 }

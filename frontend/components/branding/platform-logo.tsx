@@ -15,32 +15,27 @@ export const PlatformLogo = ({
   compact = false,
   href = "/"
 }: PlatformLogoProps) => {
-  const imageProps = compact
-    ? {
-        src: "/try-any-career-mark.svg",
-        width: 40,
-        height: 40,
-        alt: "Try Any Career logo mark"
-      }
-    : {
-        src: "/try-any-career-logo.svg",
-        width: 280,
-        height: 82,
-        alt: "Try Any Career logo"
-      };
-
   const content = (
-    <Image
-      src={imageProps.src}
-      alt={imageProps.alt}
-      width={imageProps.width}
-      height={imageProps.height}
-      className={cn(
-        compact ? "h-10 w-10" : "h-10 w-auto max-w-[220px]",
-        className
+    <span className={cn("inline-flex items-center gap-2.5", className)}>
+      <Image
+        src="/try-any-career-mark.svg"
+        alt="Try Any Career logo mark"
+        width={40}
+        height={40}
+        className="h-10 w-10"
+        priority
+      />
+      {!compact && (
+        <span className="leading-tight">
+          <span className="block font-heading text-lg font-semibold tracking-tight text-foreground">
+            Try Any Career
+          </span>
+          <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
+            Learn • Play • Rank
+          </span>
+        </span>
       )}
-      priority
-    />
+    </span>
   );
 
   if (!href) {

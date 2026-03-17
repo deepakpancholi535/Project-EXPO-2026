@@ -9,7 +9,6 @@ import {
   BookOpenCheck,
   Gamepad2,
   LayoutDashboard,
-  Medal,
   LogOut,
   Trophy,
   UserRound,
@@ -29,14 +28,19 @@ type NavItem = {
   icon: LucideIcon;
 };
 
-const navItems: NavItem[] = [
+const privateNavItems: NavItem[] = [
   { href: "/courses", label: "Courses", icon: BookOpenCheck },
   { href: "/game-zone", label: "Game Zone", icon: Gamepad2 },
   { href: "/leaderboards", label: "Leaderboards", icon: Trophy },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/careers", label: "Career Labs", icon: Medal },
   { href: "/certificates", label: "Certificates", icon: BadgeCheck },
   { href: "/profile", label: "Profile", icon: UserRound }
+];
+
+const publicNavItems: Array<{ href: Route; label: string }> = [
+  { href: "/courses", label: "Courses" },
+  { href: "/game-zone", label: "Game Zone" },
+  { href: "/leaderboards", label: "Leaderboards" }
 ];
 
 export const AppNavbar = () => {
@@ -62,35 +66,53 @@ export const AppNavbar = () => {
   }, [user]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/20 bg-background/85 backdrop-blur-xl dark:border-white/10">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/78 backdrop-blur-xl">
+      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
         <PlatformLogo />
 
-        <nav className="hidden items-center gap-2 md:flex">
-          {isAuthenticated &&
-            navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname.startsWith(item.href);
-              return (
-                <Link key={item.href} href={item.href}>
-                  <span
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-secondary text-secondary-foreground"
-                        : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
+        <nav className="hidden items-center gap-2 lg:flex">
+          {isAuthenticated
+            ? privateNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors",
+                        isActive
+                          ? "bg-secondary text-secondary-foreground"
+                          : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })
+            : publicNavItems.map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      className={cn(
+                        "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                        isActive
+                          ? "bg-secondary text-secondary-foreground"
+                          : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
         </nav>
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+
           {!isAuthenticated ? (
             <>
               <Button variant="ghost" asChild>
@@ -114,6 +136,7 @@ export const AppNavbar = () => {
                   />
                 </div>
               )}
+
               <Button
                 variant="outline"
                 size="sm"
@@ -130,31 +153,47 @@ export const AppNavbar = () => {
         </div>
       </div>
 
-      {isAuthenticated && (
-        <div className="border-t border-border/60 px-4 py-2 md:hidden">
-          <nav className="flex gap-2 overflow-x-auto pb-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname.startsWith(item.href);
-              return (
-                <Link key={item.href} href={item.href}>
-                  <span
-                    className={cn(
-                      "inline-flex whitespace-nowrap rounded-lg px-3 py-2 text-xs font-semibold",
-                      isActive
-                        ? "bg-secondary text-secondary-foreground"
-                        : "bg-card/70 text-muted-foreground"
-                    )}
-                  >
-                    <Icon className="mr-1 h-3.5 w-3.5" />
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      )}
+      <div className="border-t border-border/60 px-4 py-2 lg:hidden">
+        <nav className="flex gap-2 overflow-x-auto pb-1">
+          {isAuthenticated
+            ? privateNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      className={cn(
+                        "inline-flex whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold",
+                        isActive
+                          ? "bg-secondary text-secondary-foreground"
+                          : "bg-card/70 text-muted-foreground"
+                      )}
+                    >
+                      <Icon className="mr-1 h-3.5 w-3.5" />
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })
+            : publicNavItems.map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      className={cn(
+                        "inline-flex whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold",
+                        isActive
+                          ? "bg-secondary text-secondary-foreground"
+                          : "bg-card/70 text-muted-foreground"
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+        </nav>
+      </div>
     </header>
   );
 };
