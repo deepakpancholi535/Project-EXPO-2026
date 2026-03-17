@@ -66,11 +66,11 @@ export const AppNavbar = () => {
   }, [user]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/78 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/75">
+      <div className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
         <PlatformLogo />
 
-        <nav className="hidden items-center gap-2 lg:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {isAuthenticated
             ? privateNavItems.map((item) => {
                 const Icon = item.icon;
@@ -79,10 +79,10 @@ export const AppNavbar = () => {
                   <Link key={item.href} href={item.href}>
                     <span
                       className={cn(
-                        "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors",
+                        "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-secondary text-secondary-foreground"
-                          : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                          ? "bg-black/5 text-foreground dark:bg-white/10"
+                          : "text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
                       )}
                     >
                       <Icon className="h-4 w-4" />
@@ -97,10 +97,10 @@ export const AppNavbar = () => {
                   <Link key={item.href} href={item.href}>
                     <span
                       className={cn(
-                        "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                        "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-secondary text-secondary-foreground"
-                          : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                          ? "bg-black/5 text-foreground dark:bg-white/10"
+                          : "text-muted-foreground hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
                       )}
                     >
                       {item.label}
@@ -153,8 +153,8 @@ export const AppNavbar = () => {
         </div>
       </div>
 
-      <div className="border-t border-border/60 px-4 py-2 lg:hidden">
-        <nav className="flex gap-2 overflow-x-auto pb-1">
+      <div className="border-t border-black/5 px-4 pb-2 lg:hidden dark:border-white/10">
+        <nav className="flex gap-2 overflow-x-auto py-2">
           {isAuthenticated
             ? privateNavItems.map((item) => {
                 const Icon = item.icon;
@@ -163,10 +163,10 @@ export const AppNavbar = () => {
                   <Link key={item.href} href={item.href}>
                     <span
                       className={cn(
-                        "inline-flex whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold",
+                        "inline-flex whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium",
                         isActive
-                          ? "bg-secondary text-secondary-foreground"
-                          : "bg-card/70 text-muted-foreground"
+                          ? "bg-black/10 text-foreground dark:bg-white/10"
+                          : "bg-white/65 text-muted-foreground dark:bg-slate-800/75"
                       )}
                     >
                       <Icon className="mr-1 h-3.5 w-3.5" />
@@ -181,10 +181,10 @@ export const AppNavbar = () => {
                   <Link key={item.href} href={item.href}>
                     <span
                       className={cn(
-                        "inline-flex whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold",
+                        "inline-flex whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium",
                         isActive
-                          ? "bg-secondary text-secondary-foreground"
-                          : "bg-card/70 text-muted-foreground"
+                          ? "bg-black/10 text-foreground dark:bg-white/10"
+                          : "bg-white/65 text-muted-foreground dark:bg-slate-800/75"
                       )}
                     >
                       {item.label}

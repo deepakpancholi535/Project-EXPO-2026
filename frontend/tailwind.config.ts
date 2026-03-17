@@ -41,8 +41,8 @@ const config: Config = {
         "2xl": "1.5rem"
       },
       fontFamily: {
-        sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
-        heading: ["Sora", "system-ui", "sans-serif"]
+        sans: ["SF Pro Display", "Plus Jakarta Sans", "system-ui", "sans-serif"],
+        heading: ["SF Pro Display", "Plus Jakarta Sans", "system-ui", "sans-serif"]
       },
       boxShadow: {
         glow: "0 10px 40px -20px rgba(0, 195, 255, 0.4)"
