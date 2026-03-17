@@ -1,9 +1,10 @@
 import Link from "next/link";
+import type { Route } from "next";
 import { Github, Linkedin, Mail, MessageSquare, Phone, Youtube } from "lucide-react";
 import { PlatformLogo } from "@/components/branding/platform-logo";
 import { learningCourses } from "@/lib/learning-content";
 
-const quickLinks = [
+const quickLinks: Array<{ href: Route; label: string }> = [
   { href: "/courses", label: "Courses" },
   { href: "/game-zone", label: "Game Zone" },
   { href: "/leaderboards", label: "Leaderboards" },
@@ -48,7 +49,7 @@ export const AppFooter = () => {
             {learningCourses.map((course) => (
               <li key={course.id}>
                 <Link
-                  href={`/courses/${course.id}`}
+                  href={`/courses/${course.id}` as Route}
                   className="text-muted-foreground hover:text-primary"
                 >
                   {course.title}
@@ -109,4 +110,3 @@ export const AppFooter = () => {
     </footer>
   );
 };
-
