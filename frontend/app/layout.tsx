@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { AppNavbar } from "@/components/app-navbar";
+import { AppFooter } from "@/components/app-footer";
 
 export const metadata: Metadata = {
-  title: "TAC - Try Any Career",
+  title: "TAC Learn - Course & Gamification Platform",
   description:
-    "Explore careers through lessons, simulations, and mini-games before committing to a path."
+    "Build skills through course modules, programming games, leaderboard rankings, and verified certificates."
 };
 
 export default function RootLayout({
@@ -20,6 +21,7 @@ export default function RootLayout({
         <Providers>
           <AppNavbar />
           {children}
+          <AppFooter />
         </Providers>
       </body>
     </html>

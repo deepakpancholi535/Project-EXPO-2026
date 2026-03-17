@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Try Any Career Mark</title>
+  <desc id="desc">Three upward arrows in purple and cyan gradients with a curved base.</desc>
+  <defs>
+    <linearGradient id="centerGrad" x1="128" y1="24" x2="128" y2="198" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D74CFF" />
+      <stop offset="1" stop-color="#7C38FF" />
+    </linearGradient>
+    <linearGradient id="sideGrad" x1="56" y1="56" x2="56" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#66E3FF" />
+      <stop offset="1" stop-color="#2DA8FF" />
+    </linearGradient>
+    <linearGradient id="sideGradRight" x1="200" y1="56" x2="200" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#66E3FF" />
+      <stop offset="1" stop-color="#2DA8FF" />
+    </linearGradient>
+    <linearGradient id="baseGrad" x1="96" y1="206" x2="160" y2="206" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A46FF" />
+      <stop offset="1" stop-color="#5B6CFF" />
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M128 195C102 177 90 153 90 122V90H72L128 28L184 90H166V122C166 153 154 177 128 195Z"
+    stroke="url(#centerGrad)"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M56 176C39 163 31 145 31 120V96H20L56 56L92 96H81V120C81 140 75 154 62 165"
+    stroke="url(#sideGrad)"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M200 176C217 163 225 145 225 120V96H236L200 56L164 96H175V120C175 140 181 154 194 165"
+    stroke="url(#sideGradRight)"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M96 208C114 223 142 223 160 208"
+    stroke="url(#baseGrad)"
+    stroke-width="12"
+    stroke-linecap="round"
+  />
+</svg>

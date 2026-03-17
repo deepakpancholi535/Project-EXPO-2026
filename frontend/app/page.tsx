@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Brain, Compass, Sparkles, Target } from "lucide-react";
+import {
+  ArrowRight,
+  BrainCircuit,
+  ChartNoAxesCombined,
+  GraduationCap,
+  ShieldCheck,
+  Trophy
+} from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,22 +14,28 @@ import { Badge } from "@/components/ui/badge";
 
 const features = [
   {
-    title: "Interactive Career Simulations",
+    title: "Course-Based Learning Paths",
     description:
-      "Try real-world tasks from Software Engineering, Data Analytics, and UI/UX.",
-    icon: Compass
+      "Structured modules with lectures, assignments, and progress tracking.",
+    icon: GraduationCap
   },
   {
-    title: "Mini-Games with Scoring",
+    title: "Game Zone Gamification",
     description:
-      "Measure practical ability through fast challenge loops built for students.",
-    icon: Brain
+      "Programming concept games with score history and challenge loops.",
+    icon: BrainCircuit
   },
   {
-    title: "Compatibility Reports",
+    title: "Track-Based Leaderboards",
     description:
-      "Get strengths, weaknesses, and fit score before investing in a career path.",
-    icon: Target
+      "Compete in Programming, Web Development, Data Structures, and Overall rankings.",
+    icon: Trophy
+  },
+  {
+    title: "Verified Certificates",
+    description:
+      "Generate certificates with unique IDs and QR verification after completion.",
+    icon: ShieldCheck
   }
 ];
 
@@ -34,30 +47,30 @@ export default function HomePage() {
         <div className="absolute -bottom-16 left-8 h-56 w-56 rounded-full bg-orange-500/15 blur-3xl" />
         <div className="relative space-y-6">
           <Badge variant="success" className="px-3 py-1 text-xs">
-            Student Career Discovery Platform
+            Course + Gamification Learning Platform
           </Badge>
           <h1 className="max-w-3xl font-heading text-4xl font-bold leading-tight md:text-6xl">
-            Try Any Career Before You Commit.
+            Learn, Play, Rank, and Get Certified.
           </h1>
           <p className="max-w-2xl text-base text-muted-foreground md:text-lg">
-            TAC helps students experience real tasks from different careers
-            through short lessons, simulations, and mini-games.
+            TAC Learn combines structured courses, interactive coding games,
+            leaderboard motivation, and verifiable certificates in one platform.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link href="/signup">
-                Start For Free
+                Start Learning
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="/careers">Explore Careers</Link>
+              <Link href="/courses">Browse Courses</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {features.map((feature) => {
           const Icon = feature.icon;
           return (
@@ -78,13 +91,55 @@ export default function HomePage() {
         })}
       </section>
 
-      <section className="rounded-3xl border border-border/70 bg-card/70 p-8 text-center">
-        <Sparkles className="mx-auto mb-3 h-7 w-7 text-primary" />
-        <h2 className="font-heading text-3xl font-bold">Modern Trial Journey</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-          Signup, start a 5-day structured career trial, complete games and quizzes,
-          and instantly view your personalized compatibility dashboard.
-        </p>
+      <section className="grid gap-4 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle className="inline-flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />
+              Structured Courses
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Start with guided modules, watch lectures, and submit assignments with deadlines.
+            </p>
+            <Button asChild className="w-full">
+              <Link href="/courses">Go to Courses</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="inline-flex items-center gap-2">
+              <ChartNoAxesCombined className="h-5 w-5 text-primary" />
+              Leaderboard Motivation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Build momentum through points and rankings by track and overall progress.
+            </p>
+            <Button asChild className="w-full">
+              <Link href="/leaderboards">View Leaderboards</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="inline-flex items-center gap-2">
+              <BrainCircuit className="h-5 w-5 text-primary" />
+              Game Zone
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Practice concepts in fast game loops and improve your best scores.
+            </p>
+            <Button asChild className="w-full">
+              <Link href="/game-zone">Play Games</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </section>
     </PageShell>
   );

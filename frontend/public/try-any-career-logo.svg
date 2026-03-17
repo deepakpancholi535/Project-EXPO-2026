@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 240" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Try Any Career Logo</title>
+  <desc id="desc">Try Any Career text with a three-arrow learning and growth symbol.</desc>
+
+  <defs>
+    <linearGradient id="centerGrad" x1="180" y1="40" x2="180" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D74CFF" />
+      <stop offset="1" stop-color="#7C38FF" />
+    </linearGradient>
+    <linearGradient id="sideGradL" x1="122" y1="74" x2="122" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#66E3FF" />
+      <stop offset="1" stop-color="#2DA8FF" />
+    </linearGradient>
+    <linearGradient id="sideGradR" x1="238" y1="74" x2="238" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#66E3FF" />
+      <stop offset="1" stop-color="#2DA8FF" />
+    </linearGradient>
+    <linearGradient id="baseGrad" x1="154" y1="193" x2="206" y2="193" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A46FF" />
+      <stop offset="1" stop-color="#5B6CFF" />
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="812" height="232" rx="26" fill="#111F63" />
+
+  <path
+    d="M180 186C158 171 148 151 148 124V97H133L180 46L227 97H212V124C212 151 202 171 180 186Z"
+    stroke="url(#centerGrad)"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M122 170C108 160 101 146 101 124V104H92L122 74L152 104H143V124C143 140 138 151 128 159"
+    stroke="url(#sideGradL)"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M238 170C252 160 259 146 259 124V104H268L238 74L208 104H217V124C217 140 222 151 232 159"
+    stroke="url(#sideGradR)"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path d="M154 194C168 206 192 206 206 194" stroke="url(#baseGrad)" stroke-width="10" stroke-linecap="round" />
+
+  <text
+    x="310"
+    y="146"
+    fill="#D8CBFF"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="64"
+    font-weight="700"
+    letter-spacing="0.5"
+  >
+    Try Any Career
+  </text>
+</svg>

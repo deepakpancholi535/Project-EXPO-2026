@@ -6,14 +6,24 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis
 } from "recharts";
-import { ArrowRight, Target, Trophy } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Gamepad2,
+  GraduationCap,
+  Target,
+  Trophy
+} from "lucide-react";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PageShell } from "@/components/page-shell";
 import { useAuth } from "@/components/auth-provider";
@@ -22,6 +32,11 @@ import { CompatibilityResult } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  getUserCertificates,
+  getUserCourseProgressMap,
+  getUserGameScores
+} from "@/lib/learning-store";
 
 type PopulatedCareer = {
   _id: string;
@@ -46,6 +61,9 @@ const isPopulatedCareer = (value: unknown): value is PopulatedCareer => {
 export default function DashboardPage() {
   const { user } = useAuth();
   const [results, setResults] = useState<DashboardResult[]>([]);
+  const [gamePoints, setGamePoints] = useState(0);
+  const [courseCompletion, setCourseCompletion] = useState(0);
+  const [certificateCount, setCertificateCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,6 +73,32 @@ export default function DashboardPage() {
       .catch(() => setResults([]))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const gameScores = getUserGameScores(user.id);
+    const progressMap = getUserCourseProgressMap(user.id);
+    const certificates = getUserCertificates(user.id);
+
+    const totalGamePoints = Object.values(gameScores).reduce(
+      (total, score) => total + score.bestScore,
+      0
+    );
+
+    const averageCourseProgress =
+      Object.values(progressMap).length === 0
+        ? 0
+        : Math.round(
+            Object.values(progressMap).reduce(
+              (total, progress) => total + progress.percentComplete,
+              0
+            ) / Object.values(progressMap).length
+          );
+
+    setGamePoints(totalGamePoints);
+    setCourseCompletion(averageCourseProgress);
+    setCertificateCount(certificates.length);
+  }, [user?.id]);
 
   const latestResult = results[0];
 
@@ -76,6 +120,14 @@ export default function DashboardPage() {
         };
       });
   }, [results]);
+
+  const scoreMeterData = useMemo(
+    () => [
+      { name: "Avg Course Progress", value: courseCompletion, color: "#0ea5e9" },
+      { name: "Remaining", value: Math.max(0, 100 - courseCompletion), color: "#e2e8f0" }
+    ],
+    [courseCompletion]
+  );
 
   return (
     <ProtectedRoute>
@@ -178,6 +230,73 @@ export default function DashboardPage() {
                   <Bar dataKey="score" fill="#0ea5e9" radius={[10, 10, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section className="grid gap-4 lg:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle className="inline-flex items-center gap-2">
+                <Gamepad2 className="h-5 w-5 text-primary" />
+                Game Points
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{gamePoints}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Best score points earned in Game Zone
+              </p>
+              <Button asChild className="mt-4 w-full">
+                <Link href="/game-zone">Play More Games</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="inline-flex items-center gap-2">
+                <GraduationCap className="h-5 w-5 text-primary" />
+                Course Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="h-56">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={scoreMeterData}
+                    innerRadius={50}
+                    outerRadius={80}
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={-270}
+                  >
+                    {scoreMeterData.map((segment) => (
+                      <Cell key={segment.name} fill={segment.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+              <p className="mt-2 text-center text-sm font-semibold">{courseCompletion}% Avg</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="inline-flex items-center gap-2">
+                <BadgeCheck className="h-5 w-5 text-primary" />
+                Certificates
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{certificateCount}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Verified certificates generated
+              </p>
+              <Button asChild className="mt-4 w-full" variant="outline">
+                <Link href="/certificates">Open Certificates</Link>
+              </Button>
             </CardContent>
           </Card>
         </section>

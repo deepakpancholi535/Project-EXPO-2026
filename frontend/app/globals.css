@@ -9,13 +9,13 @@
   --foreground: 214 39% 13%;
   --card: 0 0% 100%;
   --card-foreground: 214 39% 13%;
-  --primary: 201 100% 36%;
+  --primary: 202 95% 36%;
   --primary-foreground: 210 40% 98%;
-  --secondary: 172 39% 91%;
+  --secondary: 190 53% 92%;
   --secondary-foreground: 174 58% 16%;
   --muted: 200 29% 92%;
   --muted-foreground: 214 19% 40%;
-  --accent: 30 100% 92%;
+  --accent: 28 100% 93%;
   --accent-foreground: 22 67% 30%;
   --border: 203 45% 84%;
   --input: 205 29% 89%;
@@ -50,9 +50,19 @@ body {
   background-image:
     radial-gradient(circle at 10% 20%, rgba(0, 157, 255, 0.12), transparent 35%),
     radial-gradient(circle at 90% 15%, rgba(255, 140, 46, 0.16), transparent 32%),
-    radial-gradient(circle at 70% 85%, rgba(0, 210, 170, 0.14), transparent 34%);
+    radial-gradient(circle at 70% 85%, rgba(0, 210, 170, 0.14), transparent 34%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.9));
+  background-attachment: fixed;
 }
 
 .glass-card {
   @apply border border-white/25 bg-white/60 backdrop-blur-xl shadow-xl dark:bg-white/10 dark:border-white/15;
+}
+
+a {
+  @apply transition-colors duration-200;
+}
+
+* {
+  @apply scroll-smooth;
 }
