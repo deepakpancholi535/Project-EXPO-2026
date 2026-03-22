@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { CheckCircle2, Flag, Gamepad2, ListChecks } from "lucide-react";
+import { CheckCircle2, ExternalLink, Flag, Gamepad2, ListChecks } from "lucide-react";
 import { ProtectedRoute } from "@/components/protected-route";
 import { PageShell } from "@/components/page-shell";
 import { TrialGameStage } from "@/components/trial-game-stage";
@@ -243,7 +243,31 @@ export default function TrialPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">{currentStep.content}</p>
+            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+              {currentStep.content}
+            </p>
+
+            {(currentStep.resources ?? []).length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Module Resources
+                </p>
+                <div className="grid gap-2">
+                  {currentStep.resources?.map((resource) => (
+                    <a
+                      key={`${resource.url}-${resource.label}`}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="flex items-center justify-between gap-3 rounded-xl border border-border/80 bg-card/50 px-3 py-2 text-sm transition-colors hover:border-primary/40 hover:bg-primary/5"
+                    >
+                      <span>{resource.label}</span>
+                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {currentStep.type === "task" && (
               <Textarea

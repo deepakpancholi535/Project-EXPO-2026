@@ -2,11 +2,17 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export type TrialStepType = "lesson" | "task" | "game" | "quiz" | "project";
 
+export interface ITrialResource {
+  label: string;
+  url: string;
+}
+
 export interface ITrialStep {
   day: number;
   title: string;
   type: TrialStepType;
   content: string;
+  resources?: ITrialResource[];
   gameKey?: string;
   options?: string[];
   answer?: string;
@@ -29,6 +35,13 @@ const trialStepSchema = new Schema<ITrialStep>(
       enum: ["lesson", "task", "game", "quiz", "project"]
     },
     content: { type: String, required: true },
+    resources: [
+      {
+        _id: false,
+        label: { type: String, required: true },
+        url: { type: String, required: true }
+      }
+    ],
     gameKey: { type: String },
     options: [{ type: String }],
     answer: { type: String }

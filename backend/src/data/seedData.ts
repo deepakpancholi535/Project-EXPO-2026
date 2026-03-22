@@ -79,81 +79,181 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
   "data-analyst": [
     {
       day: 1,
-      title: "Introduction Lesson",
+      title: "Module 1: The Modern Data Ecosystem",
       type: "lesson",
       content:
-        "Understand the analytics lifecycle: define a question, clean data, visualize trends, and communicate findings."
+        "Concept: Understand how brands like Netflix and Swiggy use data to drive profit, and what a modern analyst does day to day.\nTAC Gig: \"The Brand Audit.\" Identify 3 specific data points a company collects about you and hypothesize how they use each one to increase revenue.",
+      resources: [
+        {
+          label: "What Does a Data Analyst Actually Do? (2025 Update)",
+          url: "https://www.youtube.com/watch?v=mCSbYbXWmH0"
+        }
+      ]
     },
     {
       day: 2,
-      title: "Small Task: KPI Snapshot",
+      title: "Module 2: Cleaning the Chaos (Excel & Google Sheets)",
       type: "task",
       content:
-        "Choose the most relevant metric to track weekly engagement for a learning app."
+        "Concept: Learn to scrub messy data. Cleaning is often 80% of analyst work, and wrong data leads to wrong decisions.\nTAC Gig: \"The Messy Menu.\" Use a Pivot Table on a dataset to identify the top 3 failing products for a restaurant.",
+      resources: [
+        {
+          label: "Clean Your Excel Data Like a PRO",
+          url: "https://www.youtube.com/watch?v=K89RlG2NxzU"
+        },
+        {
+          label: "Data Analysis in Excel (No Python Required)",
+          url: "https://www.youtube.com/watch?v=wSFWJ0AF7SM"
+        }
+      ]
     },
     {
       day: 3,
-      title: "Interactive Mini-Game",
+      title: "Module 3: Talking to Databases (SQL Basics)",
       type: "game",
       gameKey: "pattern-recognition-game",
       content:
-        "Spot trend changes in sample data and select the best chart for each scenario."
+        "Concept: Move beyond spreadsheets and query large datasets using SQL.\nTAC Gig: \"The Warehouse Hunt.\" Write a basic SQL query to find customers who have not made a purchase in the last 6 months.\nFinish both mini-games below and save your combined score.",
+      resources: [
+        {
+          label: "SQL Explained in 6 Minutes",
+          url: "https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3D27aksOhn8IE"
+        },
+        {
+          label: "Full SQL Course for Beginners (2026 Edition)",
+          url: "https://www.youtube.com/watch?v=aS4XhMIT21s"
+        }
+      ]
     },
     {
       day: 4,
-      title: "Quiz",
+      title: "Module 4: Visual Storytelling (Power BI / Tableau)",
       type: "quiz",
       content:
-        "Which chart is best for showing change in values over time (monthly data)?",
+        "Concept: Transform rows into executive dashboards that tell a clear business story.\nKnowledge Check: Which chart is best for showing change in values over time (monthly data)?",
+      resources: [
+        {
+          label: "Beginner-Friendly Guide to Better Charts",
+          url: "https://www.youtube.com/watch?v=UjXFRk_HICU"
+        },
+        {
+          label: "2025 Power BI Dashboard: Beginner to Pro",
+          url: "https://www.youtube.com/watch?v=2M-5fiMu5Dw"
+        }
+      ],
       options: ["Pie chart", "Line chart", "Treemap"],
       answer: "Line chart"
     },
     {
       day: 5,
-      title: "Mini Project",
+      title: "Module 5 + Final Project: Insights and Communication",
       type: "project",
       content:
-        "Build an insights brief from a dataset: include chart choice, trend summary, and one recommendation."
+        "Concept: An analyst's value is in recommendations. Present findings clearly to non-technical stakeholders.\nTAC Gig: \"The Boardroom Simulation.\" Record a 60-second insight brief explaining one key discovery from your dashboard.\nFinal Project: The E-Commerce Recovery Mission. Diagnose why an online store is losing money and recommend fixes using cleaned data, SQL queries, and visual evidence.",
+      resources: [
+        {
+          label: "Storytelling with Data (Crash Course)",
+          url: "https://www.youtube.com/watch?v=ptsmJveoH2g"
+        },
+        {
+          label: "How to Present Data Insights to Stakeholders",
+          url: "https://www.youtube.com/watch?v=8EMW7io4rSI"
+        },
+        {
+          label: "End-to-End Data Analysis Project (SQL & Power BI)",
+          url: "https://www.youtube.com/watch?v=jdGJWloo-OU"
+        }
+      ]
     }
   ],
   "ui-ux-designer": [
     {
       day: 1,
-      title: "Introduction Lesson",
+      title: "Module 1: Introduction to UI/UX",
       type: "lesson",
       content:
-        "Explore UX thinking: user goals, interface hierarchy, accessibility, and visual consistency."
+        "Concepts: Understand UI and UX, core designer roles, and the full design process overview.\nOutcome: Build clarity on what UI/UX designers actually do in real product teams.",
+      resources: [
+        {
+          label: "Introduction to UI/UX Design (10-min)",
+          url: "https://www.youtube.com/watch?v=p0Pw_aI5rY0"
+        }
+      ]
     },
     {
       day: 2,
-      title: "Small Task: Heuristic Review",
+      title: "Module 2: UI Basics + First Layout",
       type: "task",
       content:
-        "Identify two usability issues in a checkout screen and recommend concise design improvements."
+        "Concepts: Learn layout, buttons, typography, and color for interface fundamentals.\nTask: Use Figma to design a coffee shop landing page frame.",
+      resources: [
+        {
+          label: "Figma Design Basics for Beginners (13-min)",
+          url: "https://www.youtube.com/watch?v=jQ1sfKIl50E"
+        },
+        {
+          label: "Creating Responsive Buttons and Components",
+          url: "https://www.youtube.com/watch?v=PZaBmmI0s4M"
+        }
+      ]
     },
     {
       day: 3,
-      title: "Interactive Mini-Game",
+      title: "Module 3: Interface Analysis",
       type: "game",
       gameKey: "color-palette-game",
       content:
-        "Choose accessible palettes and arrange UI blocks for a clear visual flow."
+        "Concepts: Analyze popular apps and websites to identify strong and weak design patterns.\nTask: Write design observations on popular digital products.\nFinish both mini-games below and save your combined score.",
+      resources: [
+        {
+          label: "Good Design vs. Bad Design Examples",
+          url: "https://www.youtube.com/watch?v=-3keSvD2soI"
+        },
+        {
+          label: "4 Levels of UI/UX Design and Mistakes to Avoid",
+          url: "https://www.youtube.com/watch?v=86PGRyQjdzQ"
+        }
+      ]
     },
     {
       day: 4,
-      title: "Quiz",
+      title: "Module 4: Real Scenario Design",
       type: "quiz",
       content:
-        "What should a primary CTA button optimize for most in most consumer flows?",
-      options: ["Visual noise", "Clarity and hierarchy", "Tiny text size"],
-      answer: "Clarity and hierarchy"
+        "Concepts: Design onboarding screens for a startup and define an effective layout flow.\nKnowledge Check: Which design choice matters most when optimizing onboarding conversion?",
+      resources: [
+        {
+          label: "Importance of Onboarding Screens",
+          url: "https://www.youtube.com/watch?v=eEMyZfeBAQQ"
+        },
+        {
+          label: "Designing Onboarding in Figma Step-by-Step",
+          url: "https://www.youtube.com/watch?v=zucDqXtTaJA"
+        }
+      ],
+      options: [
+        "Use as many CTA buttons as possible",
+        "Clear hierarchy with one focused primary CTA",
+        "Hide progress and instructions"
+      ],
+      answer: "Clear hierarchy with one focused primary CTA"
     },
     {
       day: 5,
-      title: "Mini Project",
+      title: "Module 5 + Final Project: Decision Simulation",
       type: "project",
       content:
-        "Design a high-fidelity landing section with typography scale, color system, and mobile adaptation notes."
+        "Concepts: Choose the best design options based on user behavior and product goals.\nFinal Project: Food Delivery App. Design 4 screens: Home, Menu, Checkout, and Tracking.\nFocus: Apply all learned concepts to a full real-world user journey.",
+      resources: [
+        {
+          label: "How to Really Make Design Decisions",
+          url: "https://www.youtube.com/watch?v=O_TDCiHNJ6I"
+        },
+        {
+          label: "Modern Food Delivery App Full Flow (Figma)",
+          url: "https://www.youtube.com/watch?v=nh4E48zsfE8"
+        }
+      ]
     }
   ]
 };

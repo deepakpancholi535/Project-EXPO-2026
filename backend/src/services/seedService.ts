@@ -21,12 +21,26 @@ export const seedInitialData = async (): Promise<void> => {
   }
 
   for (const career of existingCareers) {
+    const tasks = trialSeedsBySlug[career.slug] ?? [];
     const trialExists = await Trial.findOne({ careerId: career._id });
+
     if (!trialExists) {
       await Trial.create({
         careerId: career._id,
-        tasks: trialSeedsBySlug[career.slug] ?? []
+        tasks
       });
+      continue;
+    }
+
+    if (tasks.length > 0) {
+      await Trial.updateOne(
+        { _id: trialExists._id },
+        {
+          $set: {
+            tasks
+          }
+        }
+      );
     }
   }
 };
