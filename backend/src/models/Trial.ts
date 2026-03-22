@@ -12,6 +12,7 @@ export interface ITrialStep {
   title: string;
   type: TrialStepType;
   content: string;
+  assignment?: string;
   resources?: ITrialResource[];
   gameKey?: string;
   options?: string[];
@@ -35,6 +36,7 @@ const trialStepSchema = new Schema<ITrialStep>(
       enum: ["lesson", "task", "game", "quiz", "project"]
     },
     content: { type: String, required: true },
+    assignment: { type: String },
     resources: [
       {
         _id: false,

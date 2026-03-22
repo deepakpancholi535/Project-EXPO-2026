@@ -26,6 +26,7 @@ export interface TrialStep {
   title: string;
   type: "lesson" | "task" | "game" | "quiz" | "project";
   content: string;
+  assignment?: string;
   resources?: {
     label: string;
     url: string;

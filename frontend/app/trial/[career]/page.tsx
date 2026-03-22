@@ -7,13 +7,15 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { PageShell } from "@/components/page-shell";
 import { TrialGameStage } from "@/components/trial-game-stage";
 import { trialApi, resultApi } from "@/lib/api";
-import { Career, Trial } from "@/lib/types";
+import { Career, Trial, TrialStep } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+
+const MIN_ASSIGNMENT_RESPONSE = 20;
 
 const normalizeResourceUrl = (rawUrl: string): string => {
   try {
@@ -69,24 +71,27 @@ const toYouTubeEmbedUrl = (rawUrl: string): string | null => {
   }
 };
 
+const getCompletionScore = (completedCount: number, totalCount: number): number => {
+  if (totalCount <= 0) return 0;
+  return Math.round((completedCount / totalCount) * 100);
+};
+
 export default function TrialPage() {
   const params = useParams<{ career: string }>();
   const router = useRouter();
 
   const [career, setCareer] = useState<Career | null>(null);
   const [trial, setTrial] = useState<Trial | null>(null);
-  const [currentDay, setCurrentDay] = useState(1);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
   const [taskScore, setTaskScore] = useState(0);
   const [quizScore, setQuizScore] = useState(0);
   const [gameScore, setGameScore] = useState(0);
-
-  const [taskResponse, setTaskResponse] = useState("");
-  const [projectResponse, setProjectResponse] = useState("");
-  const [quizChoice, setQuizChoice] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [completedGameModules, setCompletedGameModules] = useState<number[]>([]);
+  const [moduleResponses, setModuleResponses] = useState<Record<number, string>>({});
+  const [quizChoices, setQuizChoices] = useState<Record<number, string>>({});
+  const [moduleFeedback, setModuleFeedback] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingModule, setSavingModule] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -101,7 +106,6 @@ export default function TrialPage() {
         try {
           const progressPayload = await trialApi.getMyProgress(params.career);
           const progress = progressPayload.progress;
-          setCurrentDay(progress.currentDay ?? 1);
           setCompletedDays(progress.completedDays ?? []);
           setTaskScore(progress.taskScore ?? 0);
           setQuizScore(progress.quizScore ?? 0);
@@ -117,111 +121,116 @@ export default function TrialPage() {
     void loadTrial();
   }, [params.career]);
 
-  const totalDays = trial?.tasks.length ?? 5;
+  const modules = useMemo(() => {
+    return [...(trial?.tasks ?? [])].sort((a, b) => a.day - b.day);
+  }, [trial]);
 
-  const currentStep = useMemo(() => {
-    return trial?.tasks.find((step) => step.day === currentDay);
-  }, [trial, currentDay]);
+  const totalModules = modules.length;
+  const progressPercent =
+    totalModules === 0 ? 0 : Math.round((completedDays.length / totalModules) * 100);
 
-  const progressPercent = Math.round((completedDays.length / totalDays) * 100);
-
-  const saveProgress = async ({
-    nextDay = currentDay,
-    nextCompleted = completedDays,
-    nextTaskScore = taskScore,
-    nextQuizScore = quizScore,
-    nextGameScore = gameScore
-  }: {
-    nextDay?: number;
-    nextCompleted?: number[];
-    nextTaskScore?: number;
-    nextQuizScore?: number;
-    nextGameScore?: number;
-  }) => {
-    if (!params.career) return;
-    setSaving(true);
-    try {
-      await trialApi.saveProgress(params.career, {
-        currentDay: nextDay,
-        completedDays: nextCompleted,
-        taskScore: nextTaskScore,
-        quizScore: nextQuizScore,
-        gameScore: nextGameScore,
-        status: nextCompleted.length >= totalDays ? "completed" : "in_progress"
-      });
-    } finally {
-      setSaving(false);
-    }
+  const pushModuleFeedback = (moduleDay: number, message: string) => {
+    setModuleFeedback((prev) => ({
+      ...prev,
+      [moduleDay]: message
+    }));
   };
 
-  const completeCurrentDay = async () => {
-    if (!currentStep) return;
+  const persistProgress = async ({
+    nextCompleted,
+    nextTaskScore,
+    nextQuizScore,
+    nextGameScore
+  }: {
+    nextCompleted: number[];
+    nextTaskScore: number;
+    nextQuizScore: number;
+    nextGameScore: number;
+  }) => {
+    if (!params.career) return;
 
-    let nextTaskScore = taskScore;
-    let nextQuizScore = quizScore;
-    let nextGameScore = gameScore;
-    let nextFeedback = "Progress saved.";
+    const nextModuleDay =
+      modules.find((step) => !nextCompleted.includes(step.day))?.day ?? totalModules;
 
-    if (currentStep.type === "task") {
-      if (taskResponse.trim().length < 20) {
-        setFeedback("Write a bit more detail to complete Day 2.");
-        return;
-      }
-      nextTaskScore = taskResponse.trim().length > 110 ? 90 : 70;
-      setTaskScore(nextTaskScore);
-      nextFeedback = `Task completed. Task score updated to ${nextTaskScore}%.`;
-    }
-
-    if (currentStep.type === "quiz") {
-      if (!quizChoice) {
-        setFeedback("Select one answer to finish the quiz.");
-        return;
-      }
-      nextQuizScore = quizChoice === currentStep.answer ? 100 : 45;
-      setQuizScore(nextQuizScore);
-      nextFeedback = `Quiz completed. Quiz score is ${nextQuizScore}%.`;
-    }
-
-    if (currentStep.type === "game") {
-      if (gameScore === 0) {
-        setFeedback("Finish both mini-games and save the game score first.");
-        return;
-      }
-      nextGameScore = gameScore;
-      nextFeedback = `Mini-game day completed with ${nextGameScore}% score.`;
-    }
-
-    if (currentStep.type === "project") {
-      if (projectResponse.trim().length < 40) {
-        setFeedback("Add a short mini-project plan to complete Day 5.");
-        return;
-      }
-      const projectScore = projectResponse.trim().length > 150 ? 92 : 75;
-      nextTaskScore = Math.round((taskScore + projectScore) / 2);
-      setTaskScore(nextTaskScore);
-      nextFeedback = `Mini project completed. Final task score is ${nextTaskScore}%.`;
-    }
-
-    const nextCompleted = Array.from(new Set([...completedDays, currentDay])).sort(
-      (a, b) => a - b
-    );
-    const nextDay = Math.min(totalDays, currentDay + 1);
-
-    setCompletedDays(nextCompleted);
-    setCurrentDay(nextDay);
-    setFeedback(nextFeedback);
-
-    await saveProgress({
-      nextDay,
-      nextCompleted,
-      nextTaskScore,
-      nextQuizScore,
-      nextGameScore
+    await trialApi.saveProgress(params.career, {
+      currentDay: nextModuleDay,
+      completedDays: nextCompleted,
+      taskScore: nextTaskScore,
+      quizScore: nextQuizScore,
+      gameScore: nextGameScore,
+      status: nextCompleted.length >= totalModules ? "completed" : "in_progress"
     });
   };
 
+  const completeModule = async (moduleStep: TrialStep) => {
+    if (completedDays.includes(moduleStep.day)) {
+      pushModuleFeedback(moduleStep.day, "This module is already completed.");
+      return;
+    }
+
+    if (moduleStep.type === "quiz") {
+      const selectedChoice = quizChoices[moduleStep.day];
+      if (!selectedChoice) {
+        pushModuleFeedback(moduleStep.day, "Choose an answer before completing.");
+        return;
+      }
+    }
+
+    if (moduleStep.type === "game" && !completedGameModules.includes(moduleStep.day)) {
+      pushModuleFeedback(
+        moduleStep.day,
+        "Finish the interactive activity and save score before completing this module."
+      );
+      return;
+    }
+
+    const response = (moduleResponses[moduleStep.day] ?? "").trim();
+    if (moduleStep.assignment && response.length < MIN_ASSIGNMENT_RESPONSE) {
+      pushModuleFeedback(
+        moduleStep.day,
+        `Add at least ${MIN_ASSIGNMENT_RESPONSE} characters for your module submission.`
+      );
+      return;
+    }
+
+    setSavingModule(moduleStep.day);
+
+    try {
+      const nextCompleted = Array.from(
+        new Set([...completedDays, moduleStep.day])
+      ).sort((a, b) => a - b);
+      const completionScore = getCompletionScore(nextCompleted.length, totalModules);
+
+      const nextTaskScore = completionScore;
+      const nextQuizScore =
+        moduleStep.type === "quiz" && quizChoices[moduleStep.day] === moduleStep.answer
+          ? Math.max(completionScore, 95)
+          : completionScore;
+      const nextGameScore =
+        moduleStep.type === "game"
+          ? Math.max(completionScore, gameScore)
+          : completionScore;
+
+      setCompletedDays(nextCompleted);
+      setTaskScore(nextTaskScore);
+      setQuizScore(nextQuizScore);
+      setGameScore(nextGameScore);
+
+      await persistProgress({
+        nextCompleted,
+        nextTaskScore,
+        nextQuizScore,
+        nextGameScore
+      });
+
+      pushModuleFeedback(moduleStep.day, "Module completed successfully.");
+    } finally {
+      setSavingModule(null);
+    }
+  };
+
   const submitResult = async () => {
-    if (!career || completedDays.length < totalDays) return;
+    if (!career || completedDays.length < totalModules) return;
 
     setSubmitting(true);
     try {
@@ -238,7 +247,7 @@ export default function TrialPage() {
     }
   };
 
-  if (loading || !career || !trial || !currentStep) {
+  if (loading || !career || !trial) {
     return (
       <ProtectedRoute>
         <PageShell>
@@ -255,171 +264,212 @@ export default function TrialPage() {
           <CardHeader className="bg-gradient-to-r from-cyan-500/20 to-emerald-400/15">
             <div className="flex flex-wrap items-center gap-3">
               <CardTitle className="text-2xl">{career.title} Trial</CardTitle>
-              <Badge variant="secondary">Day {currentDay} of {totalDays}</Badge>
+              <Badge variant="secondary">
+                {completedDays.length}/{totalModules} Modules Completed
+              </Badge>
             </div>
             <p className="text-sm text-muted-foreground">
-              Complete each day to unlock your TAC compatibility report.
+              Module-based learning path with videos and assignment submission in each module.
             </p>
           </CardHeader>
           <CardContent className="space-y-4 pt-6">
             <Progress value={progressPercent} />
             <div className="grid gap-2 sm:grid-cols-5">
-              {trial.tasks.map((step) => {
-                const completed = completedDays.includes(step.day);
-                const active = step.day === currentDay;
+              {modules.map((moduleStep) => {
+                const completed = completedDays.includes(moduleStep.day);
                 return (
-                  <button
-                    key={step.day}
-                    type="button"
-                    onClick={() => setCurrentDay(step.day)}
+                  <div
+                    key={moduleStep.day}
                     className={cn(
                       "rounded-xl border p-3 text-left text-sm",
-                      active
-                        ? "border-primary bg-primary/10"
-                        : "border-border bg-card/60",
-                      completed && "border-emerald-500/40 bg-emerald-500/10"
+                      completed
+                        ? "border-emerald-500/40 bg-emerald-500/10"
+                        : "border-border bg-card/60"
                     )}
                   >
-                    <p className="font-semibold">Day {step.day}</p>
-                    <p className="capitalize text-muted-foreground">{step.type}</p>
-                  </button>
+                    <p className="font-semibold">Module {moduleStep.day}</p>
+                    <p className="text-muted-foreground">
+                      {completed ? "Completed" : "Pending"}
+                    </p>
+                  </div>
                 );
               })}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ListChecks className="h-5 w-5 text-primary" />
-              {currentStep.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
-              {currentStep.content}
-            </p>
+        <div className="space-y-4">
+          {modules.map((moduleStep) => {
+            const completed = completedDays.includes(moduleStep.day);
+            const isSavingThisModule = savingModule === moduleStep.day;
 
-            {(currentStep.resources ?? []).length > 0 && (
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Module Resources
-                </p>
-                <div className="grid gap-2">
-                  {currentStep.resources?.map((resource) => {
-                    const sourceUrl = normalizeResourceUrl(resource.url);
-                    const embedUrl = toYouTubeEmbedUrl(resource.url);
+            return (
+              <Card
+                key={moduleStep.day}
+                className={cn(completed && "border-emerald-500/40 bg-emerald-500/5")}
+              >
+                <CardHeader>
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <ListChecks className="h-5 w-5 text-primary" />
+                      {moduleStep.title}
+                    </CardTitle>
+                    <Badge variant={completed ? "default" : "secondary"}>
+                      {completed ? "Completed" : "In Progress"}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                    {moduleStep.content}
+                  </p>
 
-                    return (
-                      <div
-                        key={`${resource.url}-${resource.label}`}
-                        className="space-y-2 rounded-xl border border-border/80 bg-card/50 p-3"
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <p className="text-sm font-medium">{resource.label}</p>
-                          <a
-                            href={sourceUrl}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                          >
-                            Open source
-                            <ExternalLink className="h-3.5 w-3.5" />
-                          </a>
-                        </div>
+                  {moduleStep.assignment && (
+                    <div className="rounded-xl border border-primary/25 bg-primary/5 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                        Assigned Task
+                      </p>
+                      <p className="mt-1 text-sm">{moduleStep.assignment}</p>
+                    </div>
+                  )}
 
-                        {embedUrl ? (
-                          <div className="overflow-hidden rounded-lg border border-border/70 bg-black">
-                            <div className="aspect-video w-full">
-                              <iframe
-                                src={embedUrl}
-                                title={resource.label}
-                                className="h-full w-full"
-                                loading="lazy"
-                                referrerPolicy="strict-origin-when-cross-origin"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowFullScreen
-                              />
+                  {(moduleStep.resources ?? []).length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Module Videos
+                      </p>
+                      <div className="grid gap-2">
+                        {moduleStep.resources?.map((resource) => {
+                          const sourceUrl = normalizeResourceUrl(resource.url);
+                          const embedUrl = toYouTubeEmbedUrl(resource.url);
+
+                          return (
+                            <div
+                              key={`${resource.url}-${resource.label}`}
+                              className="space-y-2 rounded-xl border border-border/80 bg-card/50 p-3"
+                            >
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <p className="text-sm font-medium">{resource.label}</p>
+                                <a
+                                  href={sourceUrl}
+                                  target="_blank"
+                                  rel="noreferrer noopener"
+                                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                                >
+                                  Open source
+                                  <ExternalLink className="h-3.5 w-3.5" />
+                                </a>
+                              </div>
+
+                              {embedUrl ? (
+                                <div className="overflow-hidden rounded-lg border border-border/70 bg-black">
+                                  <div className="aspect-video w-full">
+                                    <iframe
+                                      src={embedUrl}
+                                      title={resource.label}
+                                      className="h-full w-full"
+                                      loading="lazy"
+                                      referrerPolicy="strict-origin-when-cross-origin"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                      allowFullScreen
+                                    />
+                                  </div>
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground">
+                                  Inline playback is unavailable for this resource.
+                                </p>
+                              )}
                             </div>
-                          </div>
-                        ) : (
-                          <p className="text-xs text-muted-foreground">
-                            Inline playback is unavailable for this resource.
-                          </p>
-                        )}
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+                    </div>
+                  )}
 
-            {currentStep.type === "task" && (
-              <Textarea
-                value={taskResponse}
-                onChange={(event) => setTaskResponse(event.target.value)}
-                placeholder="Write how you would approach this task..."
-              />
-            )}
+                  {moduleStep.type === "quiz" && (moduleStep.options ?? []).length > 0 && (
+                    <div className="space-y-2">
+                      {(moduleStep.options ?? []).map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() =>
+                            setQuizChoices((prev) => ({
+                              ...prev,
+                              [moduleStep.day]: option
+                            }))
+                          }
+                          className={cn(
+                            "w-full rounded-xl border p-3 text-left text-sm",
+                            quizChoices[moduleStep.day] === option
+                              ? "border-primary bg-primary/10"
+                              : "border-border bg-card/60"
+                          )}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
-            {currentStep.type === "quiz" && (
-              <div className="space-y-2">
-                {(currentStep.options ?? []).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => setQuizChoice(option)}
-                    className={cn(
-                      "w-full rounded-xl border p-3 text-left text-sm",
-                      quizChoice === option
-                        ? "border-primary bg-primary/10"
-                        : "border-border bg-card/60"
-                    )}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            )}
+                  {moduleStep.type === "game" && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Gamepad2 className="h-4 w-4 text-primary" />
+                        Complete this activity, then click complete module.
+                      </div>
+                      <TrialGameStage
+                        careerSlug={career.slug}
+                        onComplete={(score) => {
+                          setGameScore(score);
+                          setCompletedGameModules((prev) =>
+                            prev.includes(moduleStep.day) ? prev : [...prev, moduleStep.day]
+                          );
+                          pushModuleFeedback(
+                            moduleStep.day,
+                            `Activity score saved: ${score}%. You can complete this module now.`
+                          );
+                        }}
+                      />
+                    </div>
+                  )}
 
-            {currentStep.type === "project" && (
-              <Textarea
-                value={projectResponse}
-                onChange={(event) => setProjectResponse(event.target.value)}
-                placeholder="Outline your mini-project approach..."
-              />
-            )}
+                  {moduleStep.assignment && (
+                    <Textarea
+                      value={moduleResponses[moduleStep.day] ?? ""}
+                      onChange={(event) =>
+                        setModuleResponses((prev) => ({
+                          ...prev,
+                          [moduleStep.day]: event.target.value
+                        }))
+                      }
+                      placeholder="Write your assignment response for this module..."
+                    />
+                  )}
 
-            {currentStep.type === "game" && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Gamepad2 className="h-4 w-4 text-primary" />
-                  Complete both mini-games and save your combined score.
-                </div>
-                <TrialGameStage
-                  careerSlug={career.slug}
-                  onComplete={(score) => {
-                    setGameScore(score);
-                    setFeedback(`Mini-game score saved: ${score}%`);
-                  }}
-                />
-              </div>
-            )}
+                  {moduleFeedback[moduleStep.day] && (
+                    <p className="rounded-xl border border-cyan-500/25 bg-cyan-500/10 p-3 text-sm">
+                      {moduleFeedback[moduleStep.day]}
+                    </p>
+                  )}
 
-            {feedback && (
-              <p className="rounded-xl border border-cyan-500/25 bg-cyan-500/10 p-3 text-sm">
-                {feedback}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={completeCurrentDay} disabled={saving}>
-                {saving ? "Saving..." : `Complete Day ${currentDay}`}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      onClick={() => void completeModule(moduleStep)}
+                      disabled={completed || (savingModule !== null && !isSavingThisModule)}
+                    >
+                      {completed
+                        ? "Module Completed"
+                        : isSavingThisModule
+                          ? "Saving..."
+                          : "Complete This Module"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
         <Card>
           <CardHeader>
@@ -447,11 +497,11 @@ export default function TrialPage() {
         <Card>
           <CardContent className="space-y-3 pt-6">
             <p className="text-sm text-muted-foreground">
-              Complete all five days, then generate your compatibility report.
+              Complete all modules, then generate your compatibility report.
             </p>
             <Button
               onClick={submitResult}
-              disabled={completedDays.length < totalDays || submitting}
+              disabled={completedDays.length < totalModules || submitting}
               size="lg"
             >
               <CheckCircle2 className="mr-2 h-4 w-4" />

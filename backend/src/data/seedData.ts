@@ -80,9 +80,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 1,
       title: "Module 1: The Modern Data Ecosystem",
-      type: "lesson",
+      type: "task",
       content:
-        "Concept: Understand how brands like Netflix and Swiggy use data to drive profit, and what a modern analyst does day to day.\nTAC Gig: \"The Brand Audit.\" Identify 3 specific data points a company collects about you and hypothesize how they use each one to increase revenue.",
+        "Concept: Understand how brands like Netflix and Swiggy use data to drive profit, and what a modern analyst does day to day.",
+      assignment:
+        "TAC Gig: The Brand Audit. Identify 3 specific data points a company collects about you and explain how each can be used to increase revenue.",
       resources: [
         {
           label: "What Does a Data Analyst Actually Do? (2025 Update)",
@@ -95,7 +97,9 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
       title: "Module 2: Cleaning the Chaos (Excel & Google Sheets)",
       type: "task",
       content:
-        "Concept: Learn to scrub messy data. Cleaning is often 80% of analyst work, and wrong data leads to wrong decisions.\nTAC Gig: \"The Messy Menu.\" Use a Pivot Table on a dataset to identify the top 3 failing products for a restaurant.",
+        "Concept: Learn to scrub messy data. Cleaning is often 80% of analyst work, and wrong data leads to wrong decisions.",
+      assignment:
+        "TAC Gig: The Messy Menu. Use a Pivot Table on a dataset to identify the top 3 failing products for a restaurant.",
       resources: [
         {
           label: "Clean Your Excel Data Like a PRO",
@@ -110,10 +114,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 3,
       title: "Module 3: Talking to Databases (SQL Basics)",
-      type: "game",
-      gameKey: "pattern-recognition-game",
+      type: "task",
       content:
-        "Concept: Move beyond spreadsheets and query large datasets using SQL.\nTAC Gig: \"The Warehouse Hunt.\" Write a basic SQL query to find customers who have not made a purchase in the last 6 months.\nFinish both mini-games below and save your combined score.",
+        "Concept: Move beyond spreadsheets and query large datasets using SQL.",
+      assignment:
+        "TAC Gig: The Warehouse Hunt. Write a basic SQL query to find customers who have not made a purchase in the last 6 months.",
       resources: [
         {
           label: "SQL Explained in 6 Minutes",
@@ -128,9 +133,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 4,
       title: "Module 4: Visual Storytelling (Power BI / Tableau)",
-      type: "quiz",
+      type: "task",
       content:
-        "Concept: Transform rows into executive dashboards that tell a clear business story.\nKnowledge Check: Which chart is best for showing change in values over time (monthly data)?",
+        "Concept: Transform rows into executive dashboards that tell a clear business story.",
+      assignment:
+        "TAC Gig: The CEO's Brief. Create one chart that proves a specific marketing campaign was a success.",
       resources: [
         {
           label: "Beginner-Friendly Guide to Better Charts",
@@ -140,16 +147,16 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
           label: "2025 Power BI Dashboard: Beginner to Pro",
           url: "https://www.youtube.com/watch?v=2M-5fiMu5Dw"
         }
-      ],
-      options: ["Pie chart", "Line chart", "Treemap"],
-      answer: "Line chart"
+      ]
     },
     {
       day: 5,
-      title: "Module 5 + Final Project: Insights and Communication",
-      type: "project",
+      title: "Module 5: The So What? (Insights & Communication)",
+      type: "task",
       content:
-        "Concept: An analyst's value is in recommendations. Present findings clearly to non-technical stakeholders.\nTAC Gig: \"The Boardroom Simulation.\" Record a 60-second insight brief explaining one key discovery from your dashboard.\nFinal Project: The E-Commerce Recovery Mission. Diagnose why an online store is losing money and recommend fixes using cleaned data, SQL queries, and visual evidence.",
+        "Concept: An analyst's value is in recommendations. Present findings clearly to non-technical stakeholders.\nFinal Project Scenario: The E-Commerce Recovery Mission. Diagnose why an online store is losing money and recommend fixes using cleaned data, SQL queries, and visual evidence.",
+      assignment:
+        "TAC Gig: The Boardroom Simulation. Record a 60-second insight brief explaining one key discovery from your dashboard.",
       resources: [
         {
           label: "Storytelling with Data (Crash Course)",
@@ -170,9 +177,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 1,
       title: "Module 1: Introduction to UI/UX",
-      type: "lesson",
+      type: "task",
       content:
-        "Concepts: Understand UI and UX, core designer roles, and the full design process overview.\nOutcome: Build clarity on what UI/UX designers actually do in real product teams.",
+        "Concepts: Understand UI and UX, core designer roles, and the full design process overview.",
+      assignment:
+        "Outcome Task: Write a short note (5-7 lines) on the difference between UI and UX and where each role adds business value.",
       resources: [
         {
           label: "Introduction to UI/UX Design (10-min)",
@@ -185,7 +194,8 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
       title: "Module 2: UI Basics + First Layout",
       type: "task",
       content:
-        "Concepts: Learn layout, buttons, typography, and color for interface fundamentals.\nTask: Use Figma to design a coffee shop landing page frame.",
+        "Concepts: Learn layout, buttons, typography, and color for interface fundamentals.",
+      assignment: "Task: Use Figma to design a coffee shop landing page frame.",
       resources: [
         {
           label: "Figma Design Basics for Beginners (13-min)",
@@ -200,10 +210,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 3,
       title: "Module 3: Interface Analysis",
-      type: "game",
-      gameKey: "color-palette-game",
+      type: "task",
       content:
-        "Concepts: Analyze popular apps and websites to identify strong and weak design patterns.\nTask: Write design observations on popular digital products.\nFinish both mini-games below and save your combined score.",
+        "Concepts: Analyze popular apps and websites to identify strong and weak design patterns.",
+      assignment:
+        "Task: Write observations on at least 2 popular digital products, covering what works and what should be improved.",
       resources: [
         {
           label: "Good Design vs. Bad Design Examples",
@@ -218,9 +229,11 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
     {
       day: 4,
       title: "Module 4: Real Scenario Design",
-      type: "quiz",
+      type: "task",
       content:
-        "Concepts: Design onboarding screens for a startup and define an effective layout flow.\nKnowledge Check: Which design choice matters most when optimizing onboarding conversion?",
+        "Concepts: Design onboarding screens for a startup and define an effective layout flow.",
+      assignment:
+        "Task: Design onboarding screens in Figma with clear hierarchy and a single focused primary CTA.",
       resources: [
         {
           label: "Importance of Onboarding Screens",
@@ -230,20 +243,16 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
           label: "Designing Onboarding in Figma Step-by-Step",
           url: "https://www.youtube.com/watch?v=zucDqXtTaJA"
         }
-      ],
-      options: [
-        "Use as many CTA buttons as possible",
-        "Clear hierarchy with one focused primary CTA",
-        "Hide progress and instructions"
-      ],
-      answer: "Clear hierarchy with one focused primary CTA"
+      ]
     },
     {
       day: 5,
-      title: "Module 5 + Final Project: Decision Simulation",
-      type: "project",
+      title: "Module 5: Decision Simulation + Final Project",
+      type: "task",
       content:
-        "Concepts: Choose the best design options based on user behavior and product goals.\nFinal Project: Food Delivery App. Design 4 screens: Home, Menu, Checkout, and Tracking.\nFocus: Apply all learned concepts to a full real-world user journey.",
+        "Concepts: Choose the best design options based on user behavior and product goals.\nFinal Project: Food Delivery App full flow. Focus on a complete real-world user journey.",
+      assignment:
+        "Final Task: Design 4 screens in Figma - Home, Menu, Checkout, and Tracking - and explain two design decisions based on user behavior.",
       resources: [
         {
           label: "How to Really Make Design Decisions",
