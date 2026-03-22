@@ -117,7 +117,7 @@ export const trialSeedsBySlug: Record<string, ITrialStep[]> = {
       resources: [
         {
           label: "SQL Explained in 6 Minutes",
-          url: "https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3D27aksOhn8IE"
+          url: "https://www.youtube.com/watch?v=27aksOhn8IE"
         },
         {
           label: "Full SQL Course for Beginners (2026 Edition)",

@@ -15,6 +15,60 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
+const normalizeResourceUrl = (rawUrl: string): string => {
+  try {
+    const parsed = new URL(rawUrl);
+    const isGoogleSearchRedirect =
+      parsed.hostname.includes("google.") && parsed.pathname === "/search";
+
+    if (isGoogleSearchRedirect) {
+      const target = parsed.searchParams.get("q");
+      if (target && /^https?:\/\//i.test(target)) {
+        return target;
+      }
+    }
+
+    return parsed.toString();
+  } catch {
+    return rawUrl;
+  }
+};
+
+const toYouTubeEmbedUrl = (rawUrl: string): string | null => {
+  const normalized = normalizeResourceUrl(rawUrl);
+
+  try {
+    const parsed = new URL(normalized);
+    const host = parsed.hostname.replace(/^www\./, "");
+
+    const toEmbed = (id: string) => `https://www.youtube-nocookie.com/embed/${id}`;
+
+    if (host === "youtu.be") {
+      const id = parsed.pathname.split("/").filter(Boolean)[0];
+      return id ? toEmbed(id) : null;
+    }
+
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (parsed.pathname.startsWith("/embed/")) {
+        const id = parsed.pathname.split("/").filter(Boolean)[1];
+        return id ? toEmbed(id) : null;
+      }
+
+      if (parsed.pathname.startsWith("/shorts/")) {
+        const id = parsed.pathname.split("/").filter(Boolean)[1];
+        return id ? toEmbed(id) : null;
+      }
+
+      const id = parsed.searchParams.get("v");
+      return id ? toEmbed(id) : null;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 export default function TrialPage() {
   const params = useParams<{ career: string }>();
   const router = useRouter();
@@ -253,18 +307,50 @@ export default function TrialPage() {
                   Module Resources
                 </p>
                 <div className="grid gap-2">
-                  {currentStep.resources?.map((resource) => (
-                    <a
-                      key={`${resource.url}-${resource.label}`}
-                      href={resource.url}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="flex items-center justify-between gap-3 rounded-xl border border-border/80 bg-card/50 px-3 py-2 text-sm transition-colors hover:border-primary/40 hover:bg-primary/5"
-                    >
-                      <span>{resource.label}</span>
-                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                    </a>
-                  ))}
+                  {currentStep.resources?.map((resource) => {
+                    const sourceUrl = normalizeResourceUrl(resource.url);
+                    const embedUrl = toYouTubeEmbedUrl(resource.url);
+
+                    return (
+                      <div
+                        key={`${resource.url}-${resource.label}`}
+                        className="space-y-2 rounded-xl border border-border/80 bg-card/50 p-3"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-sm font-medium">{resource.label}</p>
+                          <a
+                            href={sourceUrl}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                          >
+                            Open source
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
+
+                        {embedUrl ? (
+                          <div className="overflow-hidden rounded-lg border border-border/70 bg-black">
+                            <div className="aspect-video w-full">
+                              <iframe
+                                src={embedUrl}
+                                title={resource.label}
+                                className="h-full w-full"
+                                loading="lazy"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">
+                            Inline playback is unavailable for this resource.
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
