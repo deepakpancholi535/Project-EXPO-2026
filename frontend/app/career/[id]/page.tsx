@@ -5,31 +5,27 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ArrowRight, CircleCheck } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
-import { careerApi } from "@/lib/api";
-import { Career } from "@/lib/types";
+import { trialApi } from "@/lib/api";
+import { Career, Trial } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const journey = [
-  "Day 1 - Introduction lesson",
-  "Day 2 - Small practical task",
-  "Day 3 - Interactive mini-games",
-  "Day 4 - Quiz",
-  "Day 5 - Mini project"
-];
-
 export default function CareerDetailPage() {
   const params = useParams<{ id: string }>();
   const [career, setCareer] = useState<Career | null>(null);
+  const [trial, setTrial] = useState<Trial | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!params.id) return;
-    careerApi
-      .getOne(params.id)
-      .then((item) => setCareer(item))
+    trialApi
+      .getTrialByCareer(params.id)
+      .then((payload) => {
+        setCareer(payload.career);
+        setTrial(payload.trial);
+      })
       .catch(() => setError("Career details are unavailable right now."))
       .finally(() => setLoading(false));
   }, [params.id]);
@@ -63,21 +59,26 @@ export default function CareerDetailPage() {
           <p className="text-muted-foreground">{career.description}</p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <h2 className="font-heading text-xl font-bold">5-Day Trial Journey</h2>
+          <h2 className="font-heading text-xl font-bold">Module-Based Trial Journey</h2>
           <div className="grid gap-2 sm:grid-cols-2">
-            {journey.map((item) => (
+            {(trial?.tasks ?? []).map((moduleStep) => (
               <div
-                key={item}
+                key={moduleStep.day}
                 className="flex items-center gap-2 rounded-xl border border-border bg-card/50 p-3 text-sm"
               >
                 <CircleCheck className="h-4 w-4 text-primary" />
-                {item}
+                {moduleStep.title}
               </div>
             ))}
+            {!trial?.tasks?.length && (
+              <div className="rounded-xl border border-border bg-card/50 p-3 text-sm text-muted-foreground">
+                Modules are being prepared for this trial.
+              </div>
+            )}
           </div>
           <Button asChild size="lg">
             <Link href={`/trial/${career.slug}`}>
-              Start {career.title} Trial
+              Start {career.title} Modules
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
